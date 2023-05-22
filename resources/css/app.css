@@ -1,3 +1,62 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+
+
+
+
+.div-commune{
+
+align-content: space-between;
+  height: 125px !important;
+  background-color: rgb(66, 155, 119) !important;
+  padding: 4% !important;
+}
+
+.div-commune-content{
+  align-content:center !important;
+  justify-content: space-between !important;
+}
+
+.base-comune-link-hover:hover{
+  font-size: 26px !important;
+  color: coral !important;
+}
+.base-comune-group-link-hover:hover{
+  font-size: 26px !important;
+  color: rgb(26, 9, 95) !important;
+}
+.link-clicked{
+  font-size: 24px !important;
+  color: coral !important;
+}
+.link-clicked-group{
+  font-size: 24px !important;
+  color: rgb(34, 6, 147) !important
+}
+
+.base-comune-link-hover{
+  font-size: 24px !important;
+}
+
+a{
+    font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS' !important;
+    font-size: 18px;
+    text-decoration: none !important;
+}
+
+.table-entete{
+  color:  coral !important;
+  font-size: 22px !important;
+}
+.table-entete-group{
+  color:  rgb(10, 243, 33) !important;
+  font-size: 22px !important;
+}
+.btn{
+  font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS' !important;
+    font-size: 18px;
+}
+
+
