@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ArticleController;
+use App\Http\Controllers\CommentController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
@@ -19,6 +20,9 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+$idRegex = '[0-9]+';
+$slugRegex = '[0-9a-z\-]+';
+
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
@@ -29,6 +33,13 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-Route::resource('articles', ArticleController::class)->middleware('auth');
+Route::resource('articles', ArticleController::class)->except('show');
+Route::get('/articles/{slug}-{article}', [App\Http\Controllers\ArticleController::class, 'show'])->name('article.show')->where([
+    'article' => $idRegex,
+    'slug' => $slugRegex
+]);
+
+Route::resource('comment', CommentController::class)->except('store');
+Route::post('/articles/comment/{article}', [App\Http\Controllers\CommentController::class, 'store'])->name('comment.store');
 
 require __DIR__.'/auth.php';

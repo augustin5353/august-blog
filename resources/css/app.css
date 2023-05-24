@@ -4,7 +4,12 @@
 
 
 
-
+.body-marge{
+  margin-right: 4%;
+  margin-left: 4%;
+  margin-bottom: 6%;
+  margin-top: 3%;
+}
 
 .div-commune{
 
@@ -59,4 +64,23 @@ a{
     font-size: 18px;
 }
 
+
+div.polaroid {
+  width: 20%;
+  background-color: white;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  margin-bottom: 25px;
+  padding-top: 5px;
+}
+
+div.container {
+  text-align: center;
+  padding: 10px 20px;
+}
+
+.show-article-image{
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
 

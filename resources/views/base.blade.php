@@ -45,7 +45,7 @@ $route = request()
                 @endauth
 
                 @guest
-                    <a class="nav-link text-white base-comune-link-hover" href="{{ route('auth.login') }}">Se connecter</a>
+                    <a class="nav-link text-white base-comune-link-hover" href="{{ route('login') }}">Se connecter</a>
                 @endguest
             </ul>
         </div>
@@ -61,7 +61,7 @@ $route = request()
     @endauth
 
 
-    <div class="m-5">
+    <div class="body-marge">
         @yield('content')
     </div>
 

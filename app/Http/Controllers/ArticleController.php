@@ -18,17 +18,8 @@ class ArticleController extends Controller
     public function index()
     {
 
+
         $articles = Article::all();
-        foreach($articles as $article)
-        {
-            $article->category()->associate(rand(1, 5));
-
-            $article->save();
-        }
-
-        $user = User::find(Auth::id());
-
-        $articles = $user->articles()->paginate(15);
 
         return view('articles.index', [
 
@@ -52,20 +43,51 @@ class ArticleController extends Controller
      */
     public function store(ArticleRequest $request)
     {
+
+        $data = [
+            'title' => $request->validated('title'),
+            'content' => $request->validated('content'),
+        ];
+
         
-        $article = Article::create($request->validated());
+        $article = Article::create($data);
 
         $article->user()->associate(Auth::id());
+        
 
-        return view('articles.index');
+        if($request->validated('image') !== null)
+        {
+            $path = $request->file('image')->store(
+                'image/'.$article->id, 'public'
+            );
+            
+            $article->image_path = $path;
+
+            $article->save();
+        }
+     
+        return to_route('articles.index');
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Article $article)
+    public function show(string $slug, Article $article)
     {
-        //
+        $expertiseSlug = $article->getSlug();
+
+
+        if ($slug !== $expertiseSlug) {
+            return to_route('property.show', [
+                'slug' => $expertiseSlug,
+                 'article' => $article,
+            ]);
+        
+        }
+
+        return view('articles.show', [
+            'article' => $article
+        ]);
     }
 
     /**

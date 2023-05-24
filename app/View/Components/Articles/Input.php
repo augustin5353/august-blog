@@ -30,7 +30,7 @@ class Input extends Component
         $this->class = $class;
         $this->name = $name;
         $this->value = $value;
-        $this->label = $label ?: ucfirst($name);
+        $this->label = $label ? : ucfirst($name);
         $this->holder = $holder;
     }
 
