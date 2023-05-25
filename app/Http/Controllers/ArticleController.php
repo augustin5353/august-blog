@@ -2,14 +2,18 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Article;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use App\Http\Requests\ArticleRequest;
-use App\Models\Category;
 use App\Models\Tag;
 use App\Models\User;
+use App\Models\Article;
 use Nette\Utils\Random;
+use App\Models\Category;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Intervention\Image\ImageManager;
+use App\Http\Requests\ArticleRequest;
+use Intervention\Image\Facades\Image;
+use Illuminate\Support\Facades\Storage;
+use App\Notifications\PostArticleNotification;
 
 class ArticleController extends Controller
 {
@@ -18,7 +22,6 @@ class ArticleController extends Controller
      */
     public function index()
     {
-
 
         $articles = Article::has('comments', 'category', 'user')->get();
 
@@ -32,7 +35,7 @@ class ArticleController extends Controller
      */
     public function create()
     {
-        return view('articles.create', [
+        return view('articles.edit', [
             'article' => new Article(),
             'categories' => Category::pluck('designation', 'id'),
             'tags' => Tag::pluck('name', 'id'),
@@ -70,6 +73,13 @@ class ArticleController extends Controller
         {
             $article->tags()->syncWithoutDetaching($request->validated('tags'));
         }
+
+        $users = User::all();
+
+        foreach($users as $user)
+        {
+            $user->notify(new PostArticleNotification($user, $article));
+        }
              
         return to_route('articles.index');
     }
@@ -79,6 +89,7 @@ class ArticleController extends Controller
      */
     public function show(string $slug, Article $article)
     {
+
         $expertiseSlug = $article->getSlug();
 
 
@@ -98,17 +109,54 @@ class ArticleController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Article $article)
+    public function edit(string $slug, Article $article)
     {
-        //
+        return view('articles.edit', [
+            'article' => $article,
+            'categories' => Category::pluck('designation', 'id'),
+            'tags' => Tag::pluck('name', 'id'),
+        ]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Article $article)
+    public function update(ArticleRequest $request, Article $article)
     {
-        //
+
+
+        $article->user()->associate(Auth::id());
+
+        $article->category()->associate($request->validated('category'));
+
+        if($request->validated('tags') !== null)
+        {
+            $article->tags()->syncWithoutDetaching($request->validated('tags'));
+        }
+        
+
+        if($request->validated('image') !== null)
+        {
+            $path = $request->file('image')->store(
+                'image/'.$article->id, 'public'
+            );
+            
+            $article->image_path = $path;
+
+            $article->save();
+        }
+
+        $data = [
+            'title' => $request->validated('title'),
+            'content' => $request->validated('content'),
+        ];
+
+        $article->update($data);
+
+        return to_route('article.show', [
+            'article' => $article,
+            'slug' => $article->getSlug()
+        ])->with('success', 'Article modifier avec succès');
     }
 
     /**
@@ -116,6 +164,14 @@ class ArticleController extends Controller
      */
     public function destroy(Article $article)
     {
-        //
+        if($article->image_path !== null)
+        {
+            Storage::delete($article->image_path);
+        }
+        
+
+        $article->delete();
+
+        return back();
     }
 }

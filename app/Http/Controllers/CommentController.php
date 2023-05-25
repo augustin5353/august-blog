@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\ReceiveCommentMail;
 use App\Models\Article;
 use App\Models\Comment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\CommentRequest;
+use App\Models\User;
+use App\Notifications\ReceiveCommentNotification;
 
 class CommentController extends Controller
 {
@@ -32,12 +35,16 @@ class CommentController extends Controller
     public function store(CommentRequest $request, Article $article)
     {
 
+        $user = User::find(Auth::id());
         $comment  = Comment::create($request->validated());
 
         $comment->article()->associate($article);
-        $comment->user()->associate(Auth::id());
+        $comment->user()->associate($user);
 
         $comment->save();
+
+
+        $user->notify(new ReceiveCommentNotification($article, $article->user, $comment));
 
         return back();
     }

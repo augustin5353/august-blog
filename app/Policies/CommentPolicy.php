@@ -30,7 +30,7 @@ class CommentPolicy
      */
     public function create(User $user): Response
     {
-        return $user->isAuthenticated() ;
+       
     }
 
     /**

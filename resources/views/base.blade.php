@@ -33,12 +33,20 @@ $route = request()
 
                 @auth
 
+                    @if (Auth::user()->role == 'admin')
+                        <li class="nav-item">
+                            <a class="nav-link   text-white base-comune-link-hover
+            @if (str_contains($route, 'group')) link-clicked-group @endif"
+                                href="{{ route('admin.dashborad') }}">Administrer</a>
+                        </li>
+                    @endif
+
                     <form action="{{ route('logout') }}" method="post">
                         @csrf
                         @method('post')
 
-                        <button class=" btn nav-link   text-white  btn-primary base-comune-link-hover"> Se
-                            deconnecter</button>
+                        <button class=" btn nav-link   text-white  btn-primary base-comune-link-hover">
+                            {{ Auth::user()->name }}</button>
                     </form>
 
 

@@ -3,7 +3,7 @@
 @section('content')
     <div>
       <div class=" pb-5">
-        <span>{{ $article->title }}</span>
+        <span class="index-article-title">{{ $article->title }}</span>
       </div>
       <div class="">
         <img src="{{ $article->getImagePath() }}" alt="{{ substr($article->title, 0, 20)}}" class="show-article-image" style="width: 70%">
@@ -11,6 +11,20 @@
       <div class=" pt-5">
         <p>{{ $article->content }}</p>
       </div>
+      <span>
+        @forelse ($article->tags as $tag)
+            {{ $tag->name }}
+        @empty
+            
+        @endforelse
+      </span>
+
+      <div class=" d-flex justify-between  align-content-between align-items-center">
+        <p>Auteur: <span>{{ $article->user->name }}</span></p>
+
+        <p><span>{{ $article->getDate() }}</span></p>
+      </div>
+      
 
       <div>
         <form action="{{ route('comment.store', ['article' => $article]) }}" method="post" enctype="multipart/form-data">

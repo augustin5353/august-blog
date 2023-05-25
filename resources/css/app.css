@@ -66,17 +66,16 @@ a{
 
 
 div.polaroid {
-  width: 30%;
-  height: 50% !important;
   background-color: white;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
   margin-bottom: 25px;
-  padding-top: 5px;
+
+  margin: 20px;
   border: 1px ;
 }
 
 div.container {
-  text-align: center;
+  text-align: start;
   padding: 10px 20px;
 }
 
@@ -86,3 +85,35 @@ div.container {
   margin-right: auto;
 }
 
+.index-image{
+  height: auto;
+  width: auto !important;
+}
+
+
+.admin-div-commune{
+  height: 250px;
+    background-color: rgb(206, 202, 197) !important;
+  }
+  
+.admin-ul-padding{
+  padding-top: 5%;
+  padding-left: 25% !important;
+  padding-right: 25% !important;
+}
+
+.admin-link{
+  color: rgb(176, 12, 226);
+  font-size: 150%;
+  font-weight: 400;
+}
+
+.mt-col-base{
+  margin-top: 2% !important;
+}
+
+.p-admin-section{
+  font-size: 25px;
+  color: rgb(1, 10, 7);
+  font-weight: bold;
+}
