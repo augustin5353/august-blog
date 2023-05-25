@@ -28,5 +28,12 @@
         
         </form>
       </div>
+      <div>
+        @forelse ($article->comments as $comment)
+            <p>{{ $comment->content }}</p>
+        @empty
+            
+        @endforelse
+      </div>
     </div>
 @endsection

@@ -10,7 +10,7 @@
                         <p class="article-title-index">{{ $article->title }}</p>
                     </div>
                     <div class="">
-                        <img src="{{ $article->getImagePath() }}" alt="{{ $article->title }}" class="index-image">
+                        <img src="{{ $article->getImagePath() }}" alt="{{ $article->title }}" class="index-image" >
                         <div class="container">
                             <p>{{ substr($article->content, 0, 35) }}...</p>
                         </div>

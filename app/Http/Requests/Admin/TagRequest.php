@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Admin;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class ArticleRequest extends FormRequest
+class TagRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,11 +22,7 @@ class ArticleRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'title' => ['string', 'min:5'],
-            'content' => ['string', 'min:5'],
-            'image' => ['file', 'image', 'nullable'],
-            'category' => ['exists:categories,id'],
-            'tags' => ['array','exists:tags,id', 'nullable'],
+            'name' => ['required', 'string', 'min:3']
         ];
     }
 }

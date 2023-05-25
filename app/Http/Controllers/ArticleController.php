@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\ArticleRequest;
 use App\Models\Category;
+use App\Models\Tag;
 use App\Models\User;
 use Nette\Utils\Random;
 
@@ -19,11 +20,10 @@ class ArticleController extends Controller
     {
 
 
-        $articles = Article::all();
+        $articles = Article::has('comments', 'category', 'user')->get();
 
         return view('articles.index', [
-
-            'articles' =>$articles
+            'articles' =>$articles,
         ]);
     }
 
@@ -35,6 +35,7 @@ class ArticleController extends Controller
         return view('articles.create', [
             'article' => new Article(),
             'categories' => Category::pluck('designation', 'id'),
+            'tags' => Tag::pluck('name', 'id'),
         ]);
     }
 
@@ -43,16 +44,16 @@ class ArticleController extends Controller
      */
     public function store(ArticleRequest $request)
     {
-
         $data = [
             'title' => $request->validated('title'),
             'content' => $request->validated('content'),
         ];
 
-        
         $article = Article::create($data);
 
         $article->user()->associate(Auth::id());
+
+        $article->category()->associate($request->validated('category'));
         
 
         if($request->validated('image') !== null)
@@ -65,7 +66,11 @@ class ArticleController extends Controller
 
             $article->save();
         }
-     
+        if($request->validated('tags') !== null)
+        {
+            $article->tags()->syncWithoutDetaching($request->validated('tags'));
+        }
+             
         return to_route('articles.index');
     }
 

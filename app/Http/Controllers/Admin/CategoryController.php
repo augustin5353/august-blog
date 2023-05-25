@@ -1,14 +1,13 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
-use App\Models\Article;
-use App\Models\Comment;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\CategoryRequest;
+use App\Models\Category;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use App\Http\Requests\CommentRequest;
 
-class CommentController extends Controller
+class CategoryController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -23,29 +22,28 @@ class CommentController extends Controller
      */
     public function create()
     {
-        //
+        return view('admin.category.edite', [
+            
+            'category' => new Category() 
+        ]);
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(CommentRequest $request, Article $article)
+    public function store(CategoryRequest $request)
     {
+        $category = Category::create($request->validated());
 
-        $comment  = Comment::create($request->validated());
+        return to_route('category.index');
 
-        $comment->article()->associate($article);
-        $comment->user()->associate(Auth::id());
-
-        $comment->save();
-
-        return back();
+        
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Comment $comment)
+    public function show(string $id)
     {
         //
     }
@@ -53,7 +51,7 @@ class CommentController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Comment $comment)
+    public function edit(string $id)
     {
         //
     }
@@ -61,7 +59,7 @@ class CommentController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Comment $comment)
+    public function update(Request $request, string $id)
     {
         //
     }
@@ -69,7 +67,7 @@ class CommentController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Comment $comment)
+    public function destroy(string $id)
     {
         //
     }

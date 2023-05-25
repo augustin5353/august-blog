@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Tag;
 use App\Models\Category;
 use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Model;
@@ -29,6 +30,10 @@ class Article extends Model
     public function comments()
     {
         return $this->hasMany(Comment::class);
+    }
+    public function tags()
+    {
+        return $this->belongsToMany(Tag::class);
     }
 
        
