@@ -1,7 +1,14 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
 
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Poppins', sans-serif;
+}
 
 
 .body-marge{
@@ -79,11 +86,6 @@ div.container {
   padding: 10px 20px;
 }
 
-.show-article-image{
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
-}
 
 .index-image{
   height: auto;
@@ -116,4 +118,75 @@ div.container {
   font-size: 25px;
   color: rgb(1, 10, 7);
   font-weight: bold;
+}
+
+.index-image-container {
+  width: 100%;
+  height: 0;
+  padding-bottom: 75%; /* Ratio hauteur/largeur souhaité (ex: 4:3 -> 75%) */
+  position: relative;
+  overflow: hidden;
+}
+
+.index-image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 5px;
+}
+
+.read-more-show{
+  cursor:pointer;
+  color: #ed8323;
+}
+.read-more-hide{
+  cursor:pointer;
+  color: #ed8323;
+}
+
+.hide_content{
+  display: none;
+}
+
+.hidden-content {
+  display: none;
+}
+
+.show {
+  display:contents;
+}
+
+.show-title-article{
+  font-family:'Courier New', Courier, monospace;
+  font-size: 27px;
+  font-weight: bold;
+}
+
+.article-content{
+  font-family:'Courier New', Courier, monospace;
+  font-size: 20px;
+}
+
+
+
+.popular-article-clique-link{
+  color: rgb(15, 14, 14) !important;
+}
+
+.popular-article-image{
+  width: 100% !important; /* Ajuster la largeur de l'image */
+  height: 100% !important; /* Ajuster la hauteur de l'image */
+  object-fit: cover !important; /* Redimensionner l'image tout en conservant son ratio d'aspect */
+}
+.container{
+  margin-bottom: 100px !important;
+}
+
+.input-ul{
+  display: flex;
+  padding: 7px;
+  border: 1px solid #a6a6a6;
 }

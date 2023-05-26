@@ -1,7 +1,7 @@
 
 <div {{ $attributes->merge(['class' => 'form-group mb-3'.$class]) }}>
 
-    <label for="{{ $name }}">{{ $label }}</label>
+    <label for="{{ $name }} " class="mb-2">{{ $label }}</label>
 
     @if ($type === 'textarea')
         <textarea class="form-control @error($name) is-invalid @enderror" type="{{ $type }}"

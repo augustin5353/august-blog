@@ -77,4 +77,24 @@ class Article extends Model
 
         return response($image)->header('Content-Type', 'image/jpeg');
     }
+
+
+    public function replaceText(string $text, array $mots)
+    {
+
+        $mot_cle = "php";
+
+        for($i = 0, $size = count($mots); $i < $size; ++$i) {
+            $section_count = 0;
+            $texte_modifie = preg_replace_callback("/\b($mot_cle)\b/i", function($matches) use (&$section_count) {
+                $section_count++;
+                return "<section id=\"section-$section_count\">{$matches[0]}</section>";
+            }, $text);
+        }
+        
+        
+        
+        return $texte_modifie;
+    }
+
 }

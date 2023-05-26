@@ -1,0 +1,37 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+
+
+.container {
+
+  width:450px; /* Le div prendra 35% de la largeur de l'écran */
+  height: 350px; /* Le div prendra 75% de la hauteur de l'écran */
+  max-width: 100%; 
+
+}
+
+.show-article-image{
+  width: 95%; 
+  height: auto; 
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  border-radius: 5px;
+}
+.article-author{
+  margin-right: 25px;
+  font-family:'Courier New', Courier, monospace;
+  font-size: 22px;
+  font-weight: 600;
+}
+.article-author-name{
+
+  font-family:'Courier New', Courier, monospace;
+}
+
+.show-day{
+  font-family:'Courier New', Courier, monospace;
+}

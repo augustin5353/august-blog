@@ -22,11 +22,11 @@ class ArticleRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'title' => ['string', 'min:5', 'max:200'],
-            'content' => ['string', 'min:200'],
-            'image' => ['file', 'image', 'nullable'],
-            'category' => ['exists:categories,id'],
-            'tags' => ['array','exists:tags,id', 'nullable'],
+            'title' => ['required','string', 'min:5', 'max:200'],
+            'content' => ['required','string', 'min:180'],
+            'image' => ['image', 'nullable'],
+            'category' => ['required','exists:categories,id'],
+            'tags' => ['required'],
         ];
     }
 }

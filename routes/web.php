@@ -20,7 +20,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return to_route('articles.index');
 });
 
 $idRegex = '[0-9]+';
@@ -66,4 +66,8 @@ Route::prefix('admin')->name('admin.')->middleware('auth')->controller(AdminCont
 
 Route::resource('admin/category', CategoryController::class)->except('show')->middleware('auth');
 Route::resource('admin/tag', TagController::class)->except('show')->middleware('auth');
+
+Route::get('/resize-show-image{article}', [ArticleController::class, 'resizeShowImage'])->name('resizeShowImage');
+Route::get('/resize-index-image{article}', [ArticleController::class, 'resizeIndexImage'])->name('resizeIndexImage');
+
 require __DIR__.'/auth.php';
