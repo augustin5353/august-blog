@@ -1,7 +1,6 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
 
 *{
   margin: 0;
@@ -17,13 +16,19 @@
   margin-bottom: 6%;
   margin-top: 3%;
 }
-
+.search-marge{
+  margin-right: 4% !important;
+  margin-left: 4% !important;
+}
 .div-commune{
 
 align-content: space-between;
-  height: 125px !important;
+align-items: center;
+  height: 250px !important;
   background-color: rgb(66, 155, 119) !important;
   padding: 4% !important;
+  opacity: 0.9;
+  background-image:url('/storage/nav-back.jpg');
 }
 
 .div-commune-content{
@@ -35,17 +40,10 @@ align-content: space-between;
   font-size: 26px !important;
   color: coral !important;
 }
-.base-comune-group-link-hover:hover{
-  font-size: 26px !important;
-  color: rgb(26, 9, 95) !important;
-}
-.link-clicked{
-  font-size: 24px !important;
-  color: coral !important;
-}
-.link-clicked-group{
-  font-size: 24px !important;
-  color: rgb(34, 6, 147) !important
+
+.base-comune-link-hover:active
+{
+  color: rgb(28, 27, 27) !important;
 }
 
 .base-comune-link-hover{
@@ -58,14 +56,6 @@ a{
     text-decoration: none !important;
 }
 
-.table-entete{
-  color:  coral !important;
-  font-size: 22px !important;
-}
-.table-entete-group{
-  color:  rgb(10, 243, 33) !important;
-  font-size: 22px !important;
-}
 .btn{
   font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS' !important;
     font-size: 18px;
@@ -74,11 +64,11 @@ a{
 
 div.polaroid {
   background-color: white;
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2), 0px 0px 0 rgba(0, 0, 0, 0.5);
   margin-bottom: 25px;
 
   margin: 20px;
-  border: 1px ;
+  border: none ;
 }
 
 div.container {
@@ -88,8 +78,9 @@ div.container {
 
 
 .index-image{
-  height: auto;
-  width: auto !important;
+  width: 100%; /* Définit la largeur de l'image à 100% du conteneur */
+    height: auto; /* Permet à la hauteur de l'image de s'ajuster automatiquement en fonction de la largeur */
+    object-fit: cover;
 }
 
 
@@ -108,6 +99,16 @@ div.container {
   color: rgb(176, 12, 226);
   font-size: 150%;
   font-weight: 400;
+}
+
+.admin-link:active{
+  color: rgb(27, 25, 28);
+  font-size: 150%;
+  font-weight: 400;
+}
+
+.active-link{
+    color: rgb(27, 25, 28) !important;
 }
 
 .mt-col-base{
@@ -171,14 +172,14 @@ div.container {
 }
 
 
-
 .popular-article-clique-link{
   color: rgb(15, 14, 14) !important;
 }
 
 .popular-article-image{
   width: 100% !important; /* Ajuster la largeur de l'image */
-  height: 100% !important; /* Ajuster la hauteur de l'image */
+  height: auto !important; 
+  /* Ajuster la hauteur de l'image */
   object-fit: cover !important; /* Redimensionner l'image tout en conservant son ratio d'aspect */
 }
 .container{
@@ -189,4 +190,47 @@ div.container {
   display: flex;
   padding: 7px;
   border: 1px solid #a6a6a6;
+}
+
+
+.article-title {
+  font-family:'Courier New', Courier, monospace;
+  font-size: 24px;
+  font-weight: 600;
+  color: rgb(86, 78, 78);
+}
+
+.article-content-index {
+    font-family:'Courier New', Courier, monospace;
+    font-size: 20px;
+    text-align: justify;
+    color: rgb(86, 78, 78);
+}
+
+.update-link {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.category-designation{
+  width: 25%;
+  background-color: rgb(66, 155, 119);
+  font-family:'Courier New', Courier, monospace;
+  font-size: 30px;
+}
+
+.avartar{
+    height: 45px !important;
+    width: 45px !important;
+}
+.avartar-image{
+    width: 100% !important;
+    height: 100% !important;
+    border-radius: 50% ;
+}
+.updated-profile-image{
+    width: 100% !important;
+    height: 350px !important;
+    border-radius: 50% !important;
 }

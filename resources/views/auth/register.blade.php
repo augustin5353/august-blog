@@ -1,5 +1,5 @@
 <x-guest-layout>
-    <form method="POST" action="{{ route('register') }}">
+    <form method="POST" action="{{ route('register') }}" enctype="multipart/form-data">
         @csrf
 
         <!-- Name -->
@@ -42,7 +42,7 @@
             <label for="formFileMultiple" class="form-label" >Profile image</label>
             <input class="form-control @error('image') is-invalid @enderror" type="file" id="formFileMultiple"  name="image" />
 
-            @error('images')
+            @error('image')
                 <div class="invalid-feedback">
                     {{ $message }}
                 </div>

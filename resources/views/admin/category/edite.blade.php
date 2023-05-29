@@ -1,15 +1,21 @@
-@extends('base')
+@extends('admin.base')
 
 @section('content')
-<form action="{{ route('category.store') }}" method="post" enctype="multipart/form-data">
+<form action="{{ route($category->id !== null  ? 'category.update' : 'category.store', ['category' => $category]) }}" method="post" enctype="multipart/form-data">
 
     @csrf
-    @method('post')
+    @method($category->id === null  ? 'post' : 'put')
 
-    <x-articles.input name="designation" holder="Nom de la catégorie" :value="$category->name ? $category->name  : '' " />
+    <x-articles.input name="designation"  :value="$category->designation ? $category->designation  : '' " />
 
     <div class="text-end mt-3">
-        <x-primary-button class="">Créer la catégorie</x-primary-button>
+        <x-primary-button class="">
+            @if ($category->id === null)
+                Créer
+            @else
+                Modifier
+            @endif
+        </x-primary-button>
     </div>
 </form>
 @endsection

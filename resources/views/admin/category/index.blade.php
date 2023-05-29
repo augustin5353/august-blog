@@ -1,47 +1,31 @@
-@extends('base')
+@extends('admin.base')
 
 @section('content')
-    @forelse ($articles as $article)
-        @if ($article->image_path !== null)
-            
+    <div class="row">
+    @forelse ($categories as $category)
+        <div class="col-sm-3 pt-2">
                 <div class="polaroid">
-                    <a href="{{ route('article.show', ['slug' => $article->getSlug(), 'article' => $article->id]) }}">
-                    <div class=" p-1 ">   
-                        <p class="">{{ $article->title }}</p>
-                    </div>
-                    <div class="">
-                        <img src="{{ $article->getImagePath() }}" alt="{{ $article->title }}" class="index-image" >
-                        <div class="container">
-                            <p>{{ substr($article->content, 0, 35) }}...</p>
-                            
-                                <div class=" d-flex justify-between  align-content-between align-items-center">
-                                    @can('edit', $article)
-                                    <a href="{{ route('article.edit', ['article' =>$article, 'slug' =>$article->getSlug()]) }}" class="update-link">Modifier</a>
-                                    @endcan
+                    <div class=" card">
+                        <div class=" card-body">
+                            <p class="article-title">{{ $category->designation }}</p>
+                        </div>
 
-                                    @can('delete', $article)
-                                    <div>
-                                        <form action="{{ route('articles.destroy', ['article' => $article])}}" method="post" enctype="multipart/form-data">
+                        <div class="  d-flex  align-content-center justify-items-center justify-content-between m-3">
+                            <a href="{{ route('category.edit', ['category' => $category->id])}}" class="btn btn-outline-info  btn-sm">Editer</a>
+                            <form action="{{ route('category.destroy', ['category' => $category]) }}" method="post" enctype="multipart/form-data">
 
-                                            @csrf
-                                            @method('delete')
-                                                
-                                            <x-danger-button class="">Supprimer</x-primary-button>
-                                        </form>
-                                    </div>
-                                    @endcan
+                                @csrf
+                                @method('delete')
+
+                                <div class="text-end mt-3">
+                                    <button class=" btn btn-outline-danger btn-sm">Supprimer</button>
                                 </div>
-                                
-                               
+                            </form>           
                         </div>
                     </div>
-                </a>
                 </div>
-            
-        @else
-            <p>{{ $article->title }}</p>
-            
-        @endif
+        </div>
     @empty
     @endforelse
+</div>
 @endsection

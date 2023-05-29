@@ -2,21 +2,21 @@
 @tailwind components;
 @tailwind utilities;
 
-
+body{
+  background-color:rgba(255, 255, 255, 0.909);
+}
 
 
 .container {
-
-  width:450px; /* Le div prendra 35% de la largeur de l'écran */
-  height: 350px; /* Le div prendra 75% de la hauteur de l'écran */
+  height: 75% !important; /* Le div prendra 75% de la hauteur de l'écran */
   max-width: 100%; 
 
 }
 
 .show-article-image{
-  width: 95%; 
-  height: auto; 
-  display: block;
+  width: 100%; 
+  height: auto;
+  display:block;
   margin-left: auto;
   margin-right: auto;
   border-radius: 5px;
@@ -34,4 +34,13 @@
 
 .show-day{
   font-family:'Courier New', Courier, monospace;
+}
+.article-content-total{
+    font-family:'Courier New', Courier, monospace;
+    font-size: 22px;
+}
+
+.carousel-img{
+  width: 100;
+  height: auto;
 }

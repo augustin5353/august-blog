@@ -14,7 +14,12 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        //
+        $categories = Category::paginate(9);
+
+        return view('admin.category.index', [
+            'categories' => $categories
+        ]);
+        
     }
 
     /**
@@ -51,24 +56,28 @@ class CategoryController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(Category $category)
     {
-        //
+        return view('admin.category.edite', [
+            'category' => $category
+        ]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(CategoryRequest $request, Category $category)
     {
-        //
+        $category->update($request->validated());
+        return to_route('category.index');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Category $category)
     {
-        //
+        $category->delete();
+        return back();
     }
 }

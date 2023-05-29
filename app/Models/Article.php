@@ -50,14 +50,15 @@ class Article extends Model
         return Str::slug($this->title);
     }
 
-    public function getDate(){
+    public function getDate()
+    {
         
         $date = Carbon::parse($this->created_at);  
         
         $dateGet  ='';
         if($date->isSameDay())
         {
-            $dateGet = 'Aujourd\'hui à ' . $date->translatedFormat('H:i');
+            $dateGet = $date->translatedFormat('H:i:s');
         }
         else
         {
@@ -70,7 +71,7 @@ class Article extends Model
     public function resizeImage(string $path)
     {
         $image = Image::make($path);
-        $image = $image->resize(null, 500, function ($constraint) {
+        $image = $image->resize(null, 250, function ($constraint) {
             $constraint->aspectRatio();
         });
         

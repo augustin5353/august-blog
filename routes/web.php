@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\TagController;
+use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\ProfileController;
@@ -24,7 +25,7 @@ Route::get('/', function () {
 });
 
 $idRegex = '[0-9]+';
-$slugRegex = '[0-9a-z\-]+';
+$slugRegex = '[0-9a-zA-Z\-]+';
 
 Route::get('/dashboard', function () {
     return view('dashboard');
@@ -43,10 +44,25 @@ Route::get('/articles/{slug}-{article}', [App\Http\Controllers\ArticleController
     'article' => $idRegex,
     'slug' => $slugRegex
 ]);
+Route::get('/articles/search', [App\Http\Controllers\ArticleController::class, 'search'])->name('search');
 Route::get('/articles/{slug}-{article}/edit', [App\Http\Controllers\ArticleController::class, 'edit'])->name('article.edit')->where([
     'article' => $idRegex,
     'slug' => $slugRegex
 ])->middleware('auth');
+
+Route::get('articles/{slug}/{category}', [App\Http\Controllers\ArticleController::class, 'returnArticlesCategory'])->name('article.by.category')->where([
+    'category' => $idRegex,
+    'slug' => $slugRegex
+]);
+
+Route::get('article/categories{slug}', [App\Http\Controllers\ArticleController::class, 'getCategories'])->name('article.all.categories')->where([
+    'slug' => $slugRegex
+]);
+Route::get('article/sport', [App\Http\Controllers\ArticleController::class, 'sportArticles'])->name('article.sport');
+Route::get('article/economie', [App\Http\Controllers\ArticleController::class, 'economieArticles'])->name('article.economie');
+Route::get('article/categories{slug}', [App\Http\Controllers\ArticleController::class, 'getCategories'])->name('article.all.categories')->where([
+    'slug' => $slugRegex
+]);
 
 Route::resource('comment', CommentController::class)->except('store');
 Route::post('/articles/comment/{article}', [App\Http\Controllers\CommentController::class, 'store'])->middleware('auth')->name('comment.store');
@@ -66,8 +82,12 @@ Route::prefix('admin')->name('admin.')->middleware('auth')->controller(AdminCont
 
 Route::resource('admin/category', CategoryController::class)->except('show')->middleware('auth');
 Route::resource('admin/tag', TagController::class)->except('show')->middleware('auth');
+Route::resource('admin/user', UserController::class)->except('show', 'edit', 'create')->middleware('auth');
+Route::get('admin/articles/unapproved', [\App\Http\Controllers\Admin\ArticleController::class, 'unapprovedArticles'])->middleware('auth')->name('admin.articles.unapproved');
+Route::get('admin/articles/{article}/approve', [\App\Http\Controllers\Admin\ArticleController::class, 'approveArticle'])->middleware('auth')->name('admin.article.approve');
 
-Route::get('/resize-show-image{article}', [ArticleController::class, 'resizeShowImage'])->name('resizeShowImage');
+
+Route::get('/resize-show-image{user}', [ProfileController::class, 'resizeShowImage'])->name('resizeShowImage');
 Route::get('/resize-index-image{article}', [ArticleController::class, 'resizeIndexImage'])->name('resizeIndexImage');
 
 require __DIR__.'/auth.php';

@@ -3,21 +3,21 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Admin\TagRequest;
-use App\Models\Tag;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
-class TagController extends Controller
+class UserController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $tags = Tag::paginate(20);
+        $users = User::where('id', '!=', Auth::id())->paginate(30);
 
-        return view('admin.tag.index', [
-            'tags' => $tags
+        return view('admin.user.index', [
+            'users' => $users
         ]);
     }
 
@@ -26,19 +26,15 @@ class TagController extends Controller
      */
     public function create()
     {
-        return view('admin.tag.edite', [
-            'tag' => new Tag()
-        ]);
+        //
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(TagRequest $request)
+    public function store(Request $request)
     {
-        Tag::create($request->validated());
-
-        return to_route('tag.index');
+        //
     }
 
     /**
@@ -52,29 +48,25 @@ class TagController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Tag $tag)
+    public function edit(string $id)
     {
-        return view('admin.tag.edite', [
-            'tag' => $tag
-        ]);
+        //
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(TagRequest $request, Tag $tag)
+    public function update(Request $request, string $id)
     {
-        $tag->update($request->validated());
-
-        return to_route('tag.index');
+        //
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Tag $tag)
+    public function destroy(User $user)
     {
-        $tag->delete();
+        $user->delete();
 
         return back();
     }

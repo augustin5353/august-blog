@@ -8,13 +8,15 @@ use App\Models\Article;
 use Nette\Utils\Random;
 use App\Models\Category;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Intervention\Image\ImageManager;
 use App\Http\Requests\ArticleRequest;
 use Intervention\Image\Facades\Image;
 use Illuminate\Support\Facades\Storage;
 use App\Notifications\PostArticleNotification;
-use Illuminate\Support\Carbon;
+use Illuminate\Database\Eloquent\Builder;
+use Symfony\Component\Translation\Util\ArrayConverter;
 
 class ArticleController extends Controller
 {
@@ -24,7 +26,16 @@ class ArticleController extends Controller
     public function index()
     {
 
+        $firstArticlesByCategory = [];
         
+
+        foreach(Category::all() as $category)
+        {
+            if($category->articles()->first() !== null)
+            {
+               $firstArticlesByCategory[] =  $category->articles()->first();
+            }    
+        }
 
         /* Article le plus populaire ces derniers 7 jours  */
         $popular_article  = Article::withCount('comments')->whereDate('created_at', '>', Carbon::now()->subDays(7))
@@ -32,11 +43,40 @@ class ArticleController extends Controller
             ->first();
 
         /* tous les articles en generant en meme temps leurs commentaires et auteur et catégorie */
-        $articles = Article::has('comments', 'category', 'user')->get();
+        $articles = Article::has('comments', 'category', 'user')->paginate(15);
+
+        $sport_articles = Article::whereHas('category', function($queryBuilder)  {
+            $queryBuilder->where('designation', "Sport");
+        })->get();
+
+        
 
         return view('articles.index', [
             'popular_article' => $popular_article,
             'articles' =>$articles,
+            'sport_articles' => $sport_articles,
+            'firstArticlesByCategory' => $firstArticlesByCategory
+        ]);
+    }
+
+    public function sportArticles()
+    {
+        $articles = Article::whereHas('category', function ($queryBuilder) {
+            $queryBuilder->where('designation', "Sport");
+        })->get();
+
+        return view('articles.sport', [
+            'articles' => $articles
+        ]);
+    }
+    public function economieArticles()
+    {
+        $articles = Article::whereHas('category', function ($queryBuilder) {
+            $queryBuilder->where('designation', "Economie");
+        })->get();
+
+        return view('articles.economie', [
+            'articles' => $articles
         ]);
     }
 
@@ -58,7 +98,10 @@ class ArticleController extends Controller
     public function store(ArticleRequest $request)
     {
 
-        
+        $tags = json_decode($request->input('tags'), true);
+
+        $tagIds = [];
+
         $data = [
             'title' => $request->validated('title'),
             'content' => $request->validated('content'),
@@ -69,8 +112,33 @@ class ArticleController extends Controller
         $article->user()->associate(Auth::id());
 
         $article->category()->associate($request->validated('category'));
-        
 
+
+        if($request->validated('tags') !== null)
+        {
+            foreach ($tags as $tag)
+                {
+                    // Vérifier si le tag existe déjà dans la base de données
+                    $existingTag = Tag::where('name', $tag)->first();
+            
+                    if ($existingTag) {
+                        // Si le tag existe, ajouter son ID au tableau des IDs
+                        $tagIds[] = $existingTag->id;
+                    } else {
+                        // Si le tag n'existe pas, créer un nouveau tag
+                        $newTag = new Tag();
+                        $newTag->name = $tag;
+                        $newTag->save();
+            
+                        // Ajouter l'ID du nouveau tag au tableau des IDs
+                        $tagIds[] = $newTag->id;
+                    }
+                }
+
+            $article->tags()->sync($tagIds);
+        }
+        
+    
         if($request->hasFile('image'))
         {
 
@@ -91,35 +159,9 @@ class ArticleController extends Controller
 
             $article->image_path = 'article_images/'.$article->id.'/'. $filenameStore;
 
+            $article->save();
+
         }
-
-        if($request->validated('tags') !== null)
-        {
-          //  $article->tags()->syncWithoutDetaching($request->validated('tags'));
-        }
-
-        //creation des tags
-
-        $tagsNames = json_decode($request->input('tags'), true);
-
-        $allTags = Tag::all();
-
-        $articleTags = [];
-
-
-        $tagggs = [];
-
-        foreach($allTags as $tag)
-        {
-           
-
-        dd($tagggs);
-        $article->tags()->toggle($articleTags);
-
-        
-        $article->save();
-
-        dd($article->$tags()->get());
 
         $users = User::all();
 
@@ -175,13 +217,35 @@ class ArticleController extends Controller
     {
 
 
-        $article->user()->associate(Auth::id());
+        $tags = json_decode($request->input('tags'), true);
+
+        $tagIds = [];
 
         $article->category()->associate($request->validated('category'));
 
+
         if($request->validated('tags') !== null)
         {
-            $article->tags()->syncWithoutDetaching($request->validated('tags'));
+            foreach ($tags as $tag)
+                {
+                    // Vérifier si le tag existe déjà dans la base de données
+                    $existingTag = Tag::where('name', $tag)->first();
+            
+                    if ($existingTag) {
+                        // Si le tag existe, ajouter son ID au tableau des IDs
+                        $tagIds[] = $existingTag->id;
+                    } else {
+                        // Si le tag n'existe pas, créer un nouveau tag
+                        $newTag = new Tag();
+                        $newTag->name = $tag;
+                        $newTag->save();
+            
+                        // Ajouter l'ID du nouveau tag au tableau des IDs
+                        $tagIds[] = $newTag->id;
+                    }
+                }
+
+            $article->tags()->toggle($tagIds);
         }
         
         if($request->hasFile('image'))
@@ -208,17 +272,7 @@ class ArticleController extends Controller
 
             $article->image_path = 'article_images/'.$article->id.'/'. $filenameStore;
 
-           /*  $request->file('image')->storeAs('public/article_images/thumbnail'.$article->id, $filenameStore);
-
-            //resize image here
-            $thumbnailpath = public_path('storage/article_images/thumbnail/'.$article->id . $filenameStore);
-
-            $img = Image::make($thumbnailpath)->resize(400, 150, function($constraint) {
-                $constraint->aspectRatio();
-                
-            });
-
-            $img->save($thumbnailpath); */
+            $article->save();
         }
 
         $data = [
@@ -291,4 +345,45 @@ class ArticleController extends Controller
         // Renvoyer la réponse HTTP avec l'image modifiée
         return response($image->encode('jpg'), 200)->header('Content-Type', 'image/jpeg');
     }
+
+    public function search(Request $request)
+    {
+        $query = $request->input('query');
+
+        // Effectuez la recherche d'articles en fonction du terme de recherche
+        $query = $request->input('query');
+
+        $articles = Article::whereHas('tags', function($queryBuilder) use ($query) {
+            $queryBuilder->where('name', 'LIKE', "%$query%");
+        })->get();
+                
+        return view('articles.search_results', [
+            'articles' => $articles
+        ]);
+    }
+
+    public function returnArticlesCategory(string $slug, Category $category)
+    {
+
+        $articles = Article::whereHas('category', function ( $query) use ($category) {
+            $query->where('id', $category->id);
+        })->get();
+        
+        return view('articles.per_category', [
+            'articles' => $articles
+        ]);
+    }
+
+    public function getCategories()
+    {
+        $categories = Category::all();
+        $popular_articles = Article::withCount('comments')->whereDate('created_at', '>', Carbon::now()->subDays(7))
+            ->orderBy('comments_count', 'desc')->get();
+
+        return view('articles.all_categories', [
+            'categories' => $categories,
+            'popular_articles' => $popular_articles
+        ]);
+    }
+
 }

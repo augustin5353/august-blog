@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\RegisterUserRequest;
 use App\Models\User;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Auth\Events\Registered;
@@ -28,16 +29,8 @@ class RegisteredUserController extends Controller
      *
      * @throws \Illuminate\Validation\ValidationException
      */
-    public function store(Request $request): RedirectResponse
+    public function store(RegisterUserRequest $request): RedirectResponse
     {
-        $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:'.User::class],
-            'password' => ['required', 'confirmed', Rules\Password::defaults()],
-            'image' => ['nullable', 'image'],
-        ]);
-
-        
 
         $user = User::create([
             'name' => $request->name,
@@ -45,6 +38,32 @@ class RegisteredUserController extends Controller
             'password' => Hash::make($request->password),
             'image' => $request->image,
         ]);
+
+        if($request->hasFile('image'))
+        {
+
+            //get filename with extension
+            $filenameWithExtension = $request->file('image')->getClientOriginalName();
+
+            //get filename without extension
+            $filename = pathinfo($filenameWithExtension, PATHINFO_FILENAME);
+
+            //get the extension
+            $extension = $request->file('image')->getClientOriginalExtension();
+
+            //filename to store
+            $filenameStore = $filename. '_'.time().'.'.$extension;
+
+            //upload file
+            $request->file('image')->storeAs('public/user_profile_image/'.$user->id, $filenameStore);
+
+
+            $user->image = 'user_profile_image/'.$user->id.'/'. $filenameStore;
+
+
+
+            $user->save();
+        }
 
         event(new Registered($user));
 

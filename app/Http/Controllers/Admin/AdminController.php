@@ -10,7 +10,10 @@ class AdminController extends Controller
 {
     public function dashborad()
     {
-        return view('admin.dashboard');
+        $articles = Article::where('approved', 0)->paginate(20);
+        return view('admin.dashboard', [
+            'articles' => $articles
+        ]);
     }
     public function articleIndex()
     {

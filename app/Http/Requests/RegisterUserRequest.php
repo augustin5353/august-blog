@@ -2,9 +2,10 @@
 
 namespace App\Http\Requests;
 
+use App\Models\User;
 use Illuminate\Foundation\Http\FormRequest;
 
-class ArticleRequest extends FormRequest
+class RegisterUserRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,11 +23,10 @@ class ArticleRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'title' => ['required','string', 'min:5', 'max:200'],
-            'content' => ['required','string', 'min:180'],
-            'image' => ['image', 'nullable'],
-            'category' => ['required','exists:categories,id'],
-           'tags' => ['required',],
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:'.User::class],
+            'password' => ['required', 'confirmed', ],
+            'image' => ['nullable', 'image'],
         ];
     }
 }

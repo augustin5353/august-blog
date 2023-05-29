@@ -25,22 +25,7 @@
             
             @enderror
         </div>
-        {{-- <div class="form-group mt-3 ">
-            <label for="tag"> Ajouter de balises </label>
-            <select name="tags[]" id="tag" class="@error('tag') is-invalid @enderror form-control" multiple>
-                @foreach ($tags as $k => $v)
-                <option  @selected($article->tags->contains($k)) value="{{ $k }}">{{ $v }}</option>
-                @endforeach
-            </select>
-             @error('tags')
-            <div class="invalid-feedback">
-                {{ $message }} 
-            </div>
-            
-            @enderror
-        </div> --}}
-
-
+        
         <div class="form-group">
             <label for="image" class="form-label">Image</label>
             <input class="form-control @error('image') is-invalid @enderror" type="file" id="image" name="image" value="{{ $article->id !== null ? '' : $article->image_path}}" />

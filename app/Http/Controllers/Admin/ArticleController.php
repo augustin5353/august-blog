@@ -15,9 +15,25 @@ class ArticleController extends Controller
     {
         $articles = Article::has('comments', 'category', 'user')->paginate(15);
 
-        return view('articles.index', [
+        return view('admin.article.index', [
             'articles' =>$articles,
         ]);
+    }
+    public function unapprovedArticles()
+    {
+        $articles = Article::where('approved', false)->paginate(15);
+
+        return view('admin.article.index', [
+            'articles' =>$articles,
+        ]);
+    }
+    public function approveArticle(Article $article)
+    {
+        $article->approved = true;
+
+        $article->save();
+
+        return back();
     }
 
     /**
