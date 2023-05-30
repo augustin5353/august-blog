@@ -26,10 +26,10 @@ $route = request()
                 <div class="text-center ">
                     <ul class=" justify-between  admin-ul-padding ">
                         <li class="mb-3">
-                            <a href="{{ route('admin.article.index') }}" class="admin-link ">Liste</a>
+                            <a href="{{ route('admin.articles.approved') }}" class="admin-link @if($route === 'admin.articles.approved')  active-link    @endif">Liste approuvée</a>
                         </li>
                         <li>
-                            <a href="{{ route('admin.articles.unapproved')}}" class="admin-link @if($route === 'admin.articles.unapproved' || $route === 'admin.dashborad')  @endif">Attente</a>
+                            <a href="{{ route('admin.articles.unapproved')}}" class="admin-link @if($route === 'admin.articles.unapproved')  active-link  @endif">Attente</a>
                         </li>
                         
                     </ul>
@@ -40,10 +40,10 @@ $route = request()
                 <div class="text-center ">
                     <ul class="  justify-between admin-ul-padding">
                         <li class="mb-3">
-                            <a href="{{ route('category.index') }}" class=" admin-link @if($route === 'category.index') active-link @endif">Liste</a>
+                            <a href="{{ route('admin.category.index') }}" class=" admin-link @if($route === 'admin.category.index') active-link @endif">Liste </a>
                         </li>
                         <li>
-                            <a href="{{ route('category.create')}}" class="admin-link @if($route === 'category.edit' || $route === 'category.create') active-link @endif">Créer</a>
+                            <a href="{{ route('admin.category.create')}}" class="admin-link @if($route === 'admin.category.edit' || $route === 'admin.category.create') active-link @endif">Créer</a>
                         </li>
                     </ul>
                 </div>
@@ -53,10 +53,10 @@ $route = request()
                 <div class="text-center ">
                     <ul class="  justify-between admin-div-commune-content admin-ul-padding ">
                         <li class=" mb-3">
-                            <a href="{{ route('tag.index' )}}" class=" admin-link @if($route === 'tag.index') active-link @endif">Liste</a>
+                            <a href="{{ route('admin.tag.index' )}}" class=" admin-link @if($route === 'admin.tag.index') active-link @endif">Liste</a>
                         </li>
                         <li>
-                            <a href="{{ route('tag.create')}}" class=" admin-link @if($route === 'tag.create' || $route === 'tag.edit') active-link @endif">Créer</a>
+                            <a href="{{ route('admin.tag.create')}}" class=" admin-link @if($route === 'tag.create' || $route === 'admin.tag.edit') active-link @endif">Créer</a>
                         </li>
 
                     </ul>
@@ -67,7 +67,7 @@ $route = request()
                 <div class=" text-center gap-3 ">
                     <ul class="   justify-center admin-div-commune-content admin-ul-padding ">
                         <li class="mb-3">
-                            <a href="{{ route('user.index')}}" class=" admin-link @if($route === 'user.index') active-link @endif">Liste</a>
+                            <a href="{{ route('admin.user.index')}}" class=" admin-link @if($route === 'admin.user.index') active-link @endif">Liste</a>
                         </li>
 
                     </ul>

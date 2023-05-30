@@ -9,6 +9,11 @@ use Illuminate\Http\Request;
 
 class TagController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->authorizeResource(Tag::class, 'admin.tag');
+    }
     /**
      * Display a listing of the resource.
      */
@@ -38,7 +43,7 @@ class TagController extends Controller
     {
         Tag::create($request->validated());
 
-        return to_route('tag.index');
+        return to_route('admin.tag.index');
     }
 
     /**
@@ -66,7 +71,7 @@ class TagController extends Controller
     {
         $tag->update($request->validated());
 
-        return to_route('tag.index');
+        return to_route('admin.tag.index');
     }
 
     /**

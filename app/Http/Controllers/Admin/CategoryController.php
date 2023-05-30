@@ -6,9 +6,16 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\CategoryRequest;
 use App\Models\Category;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class CategoryController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->authorizeResource(Category::class, 'category');
+    }
+    
     /**
      * Display a listing of the resource.
      */
@@ -38,9 +45,33 @@ class CategoryController extends Controller
      */
     public function store(CategoryRequest $request)
     {
-        $category = Category::create($request->validated());
+        $data = ['designation' => $request->validated('designation')];
+        $category = Category::create($data);
 
-        return to_route('category.index');
+        if($request->hasFile('image_path'))
+        {
+            //get filename with extension
+            $filenameWithExtension = $request->file('image_path')->getClientOriginalName();
+
+            //get filename without extension
+            $filename = pathinfo($filenameWithExtension, PATHINFO_FILENAME);
+
+            //get the extension
+            $extension = $request->file('image_path')->getClientOriginalExtension();
+
+            //filename to store
+            $filenameStore = $filename. '_'.time().'.'.$extension;
+
+            //upload file
+            $request->file('image_path')->storeAs('public/categoriy_images/'.$category->id, $filenameStore);
+
+            $category->image_path = 'categoriy_images/'.$category->id.'/'. $filenameStore;
+
+            $category->save();
+
+        }
+
+        return to_route('admin.category.index');
 
         
     }
@@ -68,8 +99,40 @@ class CategoryController extends Controller
      */
     public function update(CategoryRequest $request, Category $category)
     {
-        $category->update($request->validated());
-        return to_route('category.index');
+        if($request->hasFile('image_path'))
+        {
+
+            if($category->image_path !== null)
+            {
+                Storage::delete($category->getImagePath());
+            }
+
+            //get filename with extension
+            $filenameWithExtension = $request->file('image_path')->getClientOriginalName();
+
+            //get filename without extension
+            $filename = pathinfo($filenameWithExtension, PATHINFO_FILENAME);
+
+            //get the extension
+            $extension = $request->file('image_path')->getClientOriginalExtension();
+
+            //filename to store
+            $filenameStore = $filename. '_'.time().'.'.$extension;
+
+            //upload file
+            $request->file('image_path')->storeAs('public/categoriy_images/'.$category->id, $filenameStore);
+
+            $category->image_path = 'categoriy_images/'.$category->id.'/'. $filenameStore;
+
+            $category->save();
+
+        }
+
+        $data = ['designation' => $request->validated('designation')];
+
+        $category->update($data);
+
+        return to_route('admin.category.index');
     }
 
     /**

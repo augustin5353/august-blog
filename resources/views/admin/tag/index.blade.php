@@ -11,8 +11,8 @@
                         </div>
 
                         <div class="  d-flex  align-content-center justify-items-center justify-content-between m-3">
-                            <a href="{{ route('tag.edit', ['tag' => $tag->id])}}" class="btn btn-outline-info  btn-sm">Editer</a>
-                            <form action="{{ route('tag.destroy', ['tag' => $tag]) }}" method="post" enctype="multipart/form-data">
+                            <a href="{{ route('admin.tag.edit', ['tag' => $tag->id])}}" class="btn btn-outline-info  btn-sm">Editer</a>
+                            <form action="{{ route('admin.tag.destroy', ['tag' => $tag]) }}" method="post" enctype="multipart/form-data">
 
                                 @csrf
                                 @method('delete')

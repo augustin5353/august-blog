@@ -1,7 +1,7 @@
 @extends('admin.base')
 
 @section('content')
-<form action="{{ route($tag->id !== null  ? 'tag.update' : 'tag.store', ['tag' => $tag]) }}" method="post" enctype="multipart/form-data">
+<form action="{{ route($tag->id !== null  ? 'admin.tag.update' : 'admin.tag.store', ['tag' => $tag]) }}" method="post" enctype="multipart/form-data">
 
     @csrf
     @method($tag->id === null  ? 'post' : 'put')

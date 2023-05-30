@@ -12,7 +12,7 @@ class ArticlePolicy
      * Determine whether the user can view any models.
      */
 
-     public function before(User $user): bool|null
+    public function before(User $user): bool|null
     {
         if ($user->role === 'admin') {
             return true;
@@ -29,7 +29,7 @@ class ArticlePolicy
     /**
      * Determine whether the user can view the model.
      */
-    public function view(User $user, Article $article): bool
+    public function view(User $user): bool
     {
         return true;
     }
@@ -39,7 +39,7 @@ class ArticlePolicy
      */
     public function create(User $user): bool
     {
-        return $user->isAuhenticate();
+        return $user->writer === 1;
     }
 
     /**
@@ -55,13 +55,13 @@ class ArticlePolicy
      */
     public function delete(User $user, Article $article): bool
     {
-        return $user->id === $article->user_id;
+        return $user->id === $article->user_id  ;
     }
 
     /**
      * Determine whether the user can restore the model.
      */
-    public function restore(User $user, Article $article): bool
+    public function restore(User $user): bool
     {
         return $user->role === 'admin';
     }
@@ -78,9 +78,19 @@ class ArticlePolicy
     {
         return $user->id === $article->user_id;
     }
-
-    public function isAdmin(User $user)
+    public function approvedArticles(User $user)
     {
-        return $user?->role == 'admin';
+        return $user->isAdmin();
     }
+    public function unapprovedArticles(User $user,)
+    {
+        return $user->isAdmin();
+    }
+    public function approveArticle(User $user,)
+    {
+        return $user->isAdmin();
+    }
+
+
+    
 }

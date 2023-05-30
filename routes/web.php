@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\ProfileController;
+use App\Models\Article;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -44,7 +45,9 @@ Route::get('/articles/{slug}-{article}', [App\Http\Controllers\ArticleController
     'article' => $idRegex,
     'slug' => $slugRegex
 ]);
+
 Route::get('/articles/search', [App\Http\Controllers\ArticleController::class, 'search'])->name('search');
+Route::get('/articles/{user}/my_articles', [App\Http\Controllers\ArticleController::class, 'userArticles'])->name('user.articles');
 Route::get('/articles/{slug}-{article}/edit', [App\Http\Controllers\ArticleController::class, 'edit'])->name('article.edit')->where([
     'article' => $idRegex,
     'slug' => $slugRegex
@@ -68,23 +71,23 @@ Route::resource('comment', CommentController::class)->except('store');
 Route::post('/articles/comment/{article}', [App\Http\Controllers\CommentController::class, 'store'])->middleware('auth')->name('comment.store');
 
 
-Route::prefix('admin')->name('admin.')->middleware('auth')->controller(AdminController::class)->group( function() {
-    Route::get('/dashboard', 'dashborad')->middleware('auth')->name('dashborad');
-    
-    Route::get('article', 'articleIndex')->name('article.index');
-    Route::get('article/attente', 'articleAttente')->name('article.attente');
+Route::prefix('admin')->name('admin.')->group(function() {
 
-    Route::get('category', 'articleIndex')->name('tag.index');
-    Route::get('tag', 'articleIndex')->name('tag.index');
+    Route::resource('category', CategoryController::class)->except('show')->middleware('auth');
+    Route::resource('tag', TagController::class)->except('show')->middleware('auth');
+
+    Route::resource('user', UserController::class)->except('show', 'edit', 'create')->middleware('auth');
+
+    Route::get('articles/unapproved', [\App\Http\Controllers\Admin\ArticleController::class, 'unapprovedArticles'])->middleware('auth')->name('articles.unapproved')->can('unapprovedArticles', Article::class);
+    
+    Route::get('articles/approved', [\App\Http\Controllers\Admin\ArticleController::class, 'approvedArticles'])->middleware('auth')->name('articles.approved')->can('approvedArticles', Article::class);
+
+    Route::get('articles/{article}/approve', [\App\Http\Controllers\Admin\ArticleController::class, 'approveArticle'])->middleware('auth')->name('article.approve')->can('approveArticle', Article::class);
+
 });
 
 
 
-Route::resource('admin/category', CategoryController::class)->except('show')->middleware('auth');
-Route::resource('admin/tag', TagController::class)->except('show')->middleware('auth');
-Route::resource('admin/user', UserController::class)->except('show', 'edit', 'create')->middleware('auth');
-Route::get('admin/articles/unapproved', [\App\Http\Controllers\Admin\ArticleController::class, 'unapprovedArticles'])->middleware('auth')->name('admin.articles.unapproved');
-Route::get('admin/articles/{article}/approve', [\App\Http\Controllers\Admin\ArticleController::class, 'approveArticle'])->middleware('auth')->name('admin.article.approve');
 
 
 Route::get('/resize-show-image{user}', [ProfileController::class, 'resizeShowImage'])->name('resizeShowImage');

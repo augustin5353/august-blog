@@ -20,6 +20,7 @@ use Symfony\Component\Translation\Util\ArrayConverter;
 
 class ArticleController extends Controller
 {
+  
     /**
      * Display a listing of the resource.
      */
@@ -45,9 +46,8 @@ class ArticleController extends Controller
         /* tous les articles en generant en meme temps leurs commentaires et auteur et catégorie */
         $articles = Article::has('comments', 'category', 'user')->paginate(15);
 
-        $sport_articles = Article::whereHas('category', function($queryBuilder)  {
-            $queryBuilder->where('designation', "Sport");
-        })->get();
+        $sport_articles  = Article::withCount('comments')->whereDate('created_at', '>', Carbon::now()->subDays(7))
+            ->orderBy('comments_count', 'desc')->where('id', '!=', $popular_article->id)->limit(4)->get();
 
         
 
@@ -77,6 +77,15 @@ class ArticleController extends Controller
 
         return view('articles.economie', [
             'articles' => $articles
+        ]);
+    }
+
+    public function userArticles()
+    {
+        $articles = Article::where('user_id', Auth::id());
+
+        return view('articles.user_articles', [
+            'articles' => $articles->paginate(12)
         ]);
     }
 
@@ -184,17 +193,35 @@ class ArticleController extends Controller
 
         $expertiseSlug = $article->getSlug();
 
+        $popular_articles  = Article::withCount('comments')->whereDate('created_at', '>', Carbon::now()->subDays(7))
+            ->orderBy('comments_count', 'desc')
+            ->where('id', '!=', $article->id)
+            ->limit(5)
+            ->get();
+
+        $comments = $article->comments()->paginate(3);
+
+        $articles_same_category = Article::where('category_id', $article->category->id)
+            ->limit(12)
+            ->get();
+
 
         if ($slug !== $expertiseSlug) {
             return to_route('property.show', [
                 'slug' => $expertiseSlug,
                  'article' => $article,
+                 'popular_articles' => $popular_articles,
+                 'comments' => $comments,
+                 'articles_same_category' =>$articles_same_category
             ]);
         
         }
 
         return view('articles.show', [
-            'article' => $article
+            'article' => $article,
+            'popular_articles' => $popular_articles,
+            'comments' => $comments,
+            'articles_same_category' => $articles_same_category
         ]);
     }
 

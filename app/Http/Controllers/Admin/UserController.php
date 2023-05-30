@@ -12,8 +12,14 @@ class UserController extends Controller
     /**
      * Display a listing of the resource.
      */
+
+    public function __construct()
+    {
+        $this->authorizeResource(User::class, 'admin.user');
+    }
     public function index()
     {
+        
         $users = User::where('id', '!=', Auth::id())->paginate(30);
 
         return view('admin.user.index', [

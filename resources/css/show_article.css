@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 body{
-  background-color:rgba(255, 255, 255, 0.909);
+  background-color:rgba(241, 235, 235, 0.909) !important;
 }
 
 
@@ -43,4 +43,26 @@ body{
 .carousel-img{
   width: 100;
   height: auto;
+}
+.popular-article-div{
+  background-color: rgb(201, 197, 192);
+  margin-bottom: 5%;
+  border-radius: 2%;
+}
+
+.image-size{
+  width: 50%;
+  height: 25%;
+  border-radius: 2%;
+  margin-right: 2%;
+}
+.popular-articles-category{
+  font-family:'Courier New', Courier, monospace;
+  font-size: 22px;
+  color: rgb(169, 38, 173);
+  font-weight: bold;
+}
+.popular-article-title{
+  font-family:'Courier New', Courier, monospace;
+  font-size: 18px;
 }

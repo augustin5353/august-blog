@@ -11,7 +11,7 @@
             @endif
             <span>{{ $user->name }}</span>
             <span>{{ $user->email }}</span>
-            <form action="{{ route('user.destroy', ['user' => $user]) }}" method="post" enctype="multipart/form-data">
+            <form action="{{ route('admin.user.destroy', ['user' => $user]) }}" method="post" enctype="multipart/form-data">
                 @csrf
                 @method('delete')
 

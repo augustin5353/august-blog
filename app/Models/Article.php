@@ -4,6 +4,8 @@ namespace App\Models;
 
 use App\Models\Tag;
 use App\Models\Category;
+use App\Models\Scopes\RecentsArticlesScope;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Str;
 use Illuminate\Support\Carbon;
 use Intervention\Image\Facades\Image;
@@ -14,6 +16,11 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class Article extends Model
 {
     use HasFactory;
+
+    protected static function booted(): void
+    {
+        static::addGlobalScope(new RecentsArticlesScope);
+    }
 
     protected $fillable = [
         'title',
@@ -96,6 +103,11 @@ class Article extends Model
         
         
         return $texte_modifie;
+    }
+
+    public function scopeRecentsArticles(Builder $builder)
+    {
+        return $builder->orderBy('created_at', 'asc');
     }
 
 }

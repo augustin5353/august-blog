@@ -58,7 +58,7 @@
                             <p class="article-title">{{ substr($article->title, 0, 75) }}...</p>
                         </div>
                         <img src="{{ $article->getImagePath() }}" class="d-block w-100 " alt="{{ substr($article->title, 0, 20) }}">
-                    </div>
+                     </div>
                    </a>
 
                 @empty

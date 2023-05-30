@@ -3,6 +3,8 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+
+use App\Models\Scopes\RecentsArticlesScope;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Notifications\Notifiable;
@@ -13,6 +15,10 @@ class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
 
+    protected static function booted(): void
+    {
+        static::addGlobalScope(new RecentsArticlesScope);
+    }
     /**
      * The attributes that are mass assignable.
      *
@@ -52,5 +58,16 @@ class User extends Authenticatable
     {
         return Storage::url($this->image);
     }
+
+    public function isAdmin()
+    {
+        return $this->role === 'admin';
+    }
+    public function isWriter()
+    {
+        return $this->writer === 1;
+    }
+
+    
     
 }

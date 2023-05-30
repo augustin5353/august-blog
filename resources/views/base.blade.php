@@ -21,13 +21,13 @@ $route = request()
         <div class="col-3 text-start ">
             <ul class="nav justify-content-start div-commune-content">
                 <li class="nav-item">
-                    <a class="nav-link   text-white base-comune-link-hover
-        @if ($route === 'articles.create') link-cliked @endif"
+                    <a class="nav-link  base-comune-link-hover
+        @if ($route === 'articles.create') active-link @endif"
                         href="{{ route('articles.create') }} ">Créer article</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link   text-white base-comune-link-hover
-       @if ($route === 'articles.index') link-cliked @endif"
+                    <a class="nav-link   base-comune-link-hover
+       @if ($route === 'articles.index') active-link @endif"
                         href="{{ route('articles.index') }}">Articles</a>
                 </li>
 
@@ -38,18 +38,18 @@ $route = request()
         <div class="col">
             <ul class="nav"> 
                 <li class="nav-item">
-                    <a class="nav-link   text-white base-comune-link-hover
+                    <a class="nav-link    base-comune-link-hover
        @if ($route === 'article.sport') active-link @endif"
                         href="{{ route('article.sport') }}">Sport</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link   text-white base-comune-link-hover
+                    <a class="nav-link  base-comune-link-hover
        @if ($route === 'article.economie') active-link @endif"
                         href="{{ route('article.economie') }}">Economie</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link   text-white base-comune-link-hover
-       @if ($route === 'article.all.categories') link-cliked @endif"
+                    <a class="nav-link    base-comune-link-hover
+       @if ($route === 'article.all.categories') active-link @endif"
                         href="{{ route('article.all.categories', ['slug' => 'sport-politique-economie-dev-mobile-autres']) }}">Voir plus</a>
                 </li>
             </ul>
@@ -60,28 +60,31 @@ $route = request()
              @guest
                 <ul class="nav justify-content-end">
                     <li>
-                        <a class="nav-link text-white base-comune-link-hover" href="{{ route('login') }}" class="@if ($route === 'login') active-link @endif">Se connecter</a>
+                        <a class="nav-link  base-comune-link-hover" href="{{ route('login') }}" class="@if ($route === 'login') active-link @endif">Se connecter</a>
                     </li>
                 </ul>
             @endguest
             @auth
             <ul class="nav justify-content-end div-commune-content">
-                <li>
-                    <form action="{{ route('logout') }}" method="post">
-                        @csrf
-                        @method('post')
-
-                        <button class=" btn nav-link   text-white   base-comune-link-hover">
-                            {{ Auth::user()->name }}</button>
-                    </form>
+                <li class="nav-item">
                     @if (Auth::user()->role == 'admin')
                         <li class="nav-item">
-                            <a class="nav-link   text-white base-comune-link-hover
-            @if ($route === 'admin.dashborad') link-clicked-group @endif"
-                                href="{{ route('admin.dashborad') }}">Administrer</a>
+                            <a class="nav-link   base-comune-link-hover"
+                                href="{{ route('admin.articles.unapproved') }}">Administrer</a>
                         </li>
                     @endif
                 </li>
+
+
+
+                @include('user_actions')
+
+
+
+
+
+
+
             </ul> 
                 @endauth
 
@@ -105,6 +108,10 @@ $route = request()
     </form>
 
     <div class="body-marge">
+
+        
+
+        @include('shared.flash')
         
         @yield('content')
     </div>

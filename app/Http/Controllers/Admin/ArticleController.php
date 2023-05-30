@@ -11,9 +11,9 @@ class ArticleController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function approvedArticles()
     {
-        $articles = Article::has('comments', 'category', 'user')->paginate(15);
+        $articles = Article::where('approved', 1)->paginate(15);
 
         return view('admin.article.index', [
             'articles' =>$articles,
@@ -21,7 +21,7 @@ class ArticleController extends Controller
     }
     public function unapprovedArticles()
     {
-        $articles = Article::where('approved', false)->paginate(15);
+        $articles = Article::where('approved', 0)->paginate(15);
 
         return view('admin.article.index', [
             'articles' =>$articles,

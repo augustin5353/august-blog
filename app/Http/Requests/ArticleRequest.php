@@ -26,7 +26,7 @@ class ArticleRequest extends FormRequest
             'content' => ['required','string', 'min:180'],
             'image' => ['image', 'nullable'],
             'category' => ['required','exists:categories,id'],
-           'tags' => ['required',],
+           'tags' => ['nullable',],
         ];
     }
 }

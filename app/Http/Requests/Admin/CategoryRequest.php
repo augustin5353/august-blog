@@ -22,7 +22,8 @@ class CategoryRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'designation' => ['string', 'required', 'min:3']
+            'designation' => ['string', 'required', 'min:3'],
+            'image_path' => ['image', 'nullable']
         ];
     }
 }

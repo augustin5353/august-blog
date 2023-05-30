@@ -1,31 +1,39 @@
 @extends('admin.base')
 
 @section('content')
-    <div class="row">
+
+<div class="row">
     @forelse ($categories as $category)
-        <div class="col-sm-3 pt-2">
-                <div class="polaroid">
-                    <div class=" card">
-                        <div class=" card-body">
-                            <p class="article-title">{{ $category->designation }}</p>
+        <div class="col-sm-2 pt-5">
+            <div class="polaroid">
+                    <div class="container">
+                        <div class="index-image-container">
+                            <img src="{{ $category->getImagePath() }}" alt="{{ $category->designation }}" class="index-image">
                         </div>
+                        <p class="article-content-index"> {{ $category->designation }}</p>
+                        <div class="d-flex justify-between align-content-between align-items-center">
+                                <a href="{{ route('admin.category.edit', ['category' => $category]) }}" class="btn  btn-outline-info btn-sm">Modifier</a>
 
-                        <div class="  d-flex  align-content-center justify-items-center justify-content-between m-3">
-                            <a href="{{ route('category.edit', ['category' => $category->id])}}" class="btn btn-outline-info  btn-sm">Editer</a>
-                            <form action="{{ route('category.destroy', ['category' => $category]) }}" method="post" enctype="multipart/form-data">
-
-                                @csrf
-                                @method('delete')
-
-                                <div class="text-end mt-3">
-                                    <button class=" btn btn-outline-danger btn-sm">Supprimer</button>
+                                <div>
+                                    <form action="{{ route('admin.category.destroy', ['category' => $category]) }}" method="post" enctype="multipart/form-data">
+                                        @csrf
+                                        @method('delete')
+                                        <button class=" btn btn-outline-danger btn-sm ">Supprimer</button>
+                                    </form>
                                 </div>
-                            </form>           
                         </div>
                     </div>
-                </div>
+            </div>
         </div>
     @empty
+    <div>
+        Aucune catégorie
+    </div>
     @endforelse
+    
 </div>
+
+
+
+    {{ $categories->links() }}
 @endsection

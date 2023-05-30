@@ -16,14 +16,12 @@
                         <p class="article-content-index"> {{ substr($article->content, 0, 175) }}...</p>
                         <span class="text-end">{{$article->getDate()}}</span>
                         <div class="d-flex justify-between align-content-between align-items-center">
-                            @can('edit', $article)
                                 <a href="{{ route('article.edit', ['article' => $article, 'slug' => $article->getSlug()]) }}" class="btn  btn-outline-info btn-sm">Modifier</a>
 
                                 @if($article->approved === 0)
-                                <a href="{{ route('admin.article.approve', ['article' => $article]) }}" class=" btn btn-outline-warning btn-sm">Approuver</a>
+                                    <a href="{{ route('admin.article.approve', ['article' => $article]) }}" class=" btn btn-outline-warning btn-sm">Approuver</a>
                                 @endif
-                            @endcan
-                            @can('delete', $article)
+
                                 <div>
                                     <form action="{{ route('articles.destroy', ['article' => $article]) }}" method="post" enctype="multipart/form-data">
                                         @csrf
@@ -31,7 +29,6 @@
                                         <button class=" btn btn-outline-danger btn-sm ">Supprimer</button>
                                     </form>
                                 </div>
-                            @endcan
                         </div>
                     </div>
                 </a>
