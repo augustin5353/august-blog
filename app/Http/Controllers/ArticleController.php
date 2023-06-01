@@ -27,35 +27,23 @@ class ArticleController extends Controller
     public function index()
     {
 
-        $firstArticlesByCategory = [];
-        
 
-        foreach(Category::all() as $category)
-        {
-            if($category->articles()->first() !== null)
-            {
-               $firstArticlesByCategory[] =  $category->articles()->first();
-            }    
-        }
 
         /* Article le plus populaire ces derniers 7 jours  */
         $popular_article  = Article::withCount('comments')->whereDate('created_at', '>', Carbon::now()->subDays(7))
             ->orderBy('comments_count', 'desc')
-            ->first();
+            ->approvedArticles()->first();
 
         /* tous les articles en generant en meme temps leurs commentaires et auteur et catégorie */
-        $articles = Article::has('comments', 'category', 'user')->paginate(15);
+        $articles = Article::has('comments', 'category', 'user')->approvedArticles()->paginate(15);
 
-        $sport_articles  = Article::withCount('comments')->whereDate('created_at', '>', Carbon::now()->subDays(7))
-            ->orderBy('comments_count', 'desc')->where('id', '!=', $popular_article->id)->limit(4)->get();
-
-        
+        $popular_articles  = Article::withCount('comments')->whereDate('created_at', '>', Carbon::now()->subDays(7))
+            ->orderBy('comments_count', 'desc')->where('id', '!=', $popular_article->id)->approvedArticles()->limit(4)->get();
 
         return view('articles.index', [
             'popular_article' => $popular_article,
             'articles' =>$articles,
-            'sport_articles' => $sport_articles,
-            'firstArticlesByCategory' => $firstArticlesByCategory
+            'popular_articles' => $popular_articles,
         ]);
     }
 
@@ -63,17 +51,18 @@ class ArticleController extends Controller
     {
         $articles = Article::whereHas('category', function ($queryBuilder) {
             $queryBuilder->where('designation', "Sport");
-        })->get();
+        })->approvedArticles()->get();
 
         return view('articles.sport', [
             'articles' => $articles
         ]);
     }
+    
     public function economieArticles()
     {
         $articles = Article::whereHas('category', function ($queryBuilder) {
             $queryBuilder->where('designation', "Economie");
-        })->get();
+        })->approvedArticles()->get();
 
         return view('articles.economie', [
             'articles' => $articles
@@ -172,14 +161,6 @@ class ArticleController extends Controller
 
         }
 
-        $users = User::all();
-
-        foreach($users as $user)
-        {
-            $user->notify(new PostArticleNotification($user, $article));
-        }
-
-
         
         return to_route('articles.index');
     }
@@ -196,7 +177,7 @@ class ArticleController extends Controller
         $popular_articles  = Article::withCount('comments')->whereDate('created_at', '>', Carbon::now()->subDays(7))
             ->orderBy('comments_count', 'desc')
             ->where('id', '!=', $article->id)
-            ->limit(5)
+            ->limit(4)
             ->get();
 
         $comments = $article->comments()->paginate(3);
@@ -382,7 +363,7 @@ class ArticleController extends Controller
 
         $articles = Article::whereHas('tags', function($queryBuilder) use ($query) {
             $queryBuilder->where('name', 'LIKE', "%$query%");
-        })->get();
+        })->approvedArticles()->get();
                 
         return view('articles.search_results', [
             'articles' => $articles
@@ -394,7 +375,7 @@ class ArticleController extends Controller
 
         $articles = Article::whereHas('category', function ( $query) use ($category) {
             $query->where('id', $category->id);
-        })->get();
+        })->approvedArticles()->get();
         
         return view('articles.per_category', [
             'articles' => $articles

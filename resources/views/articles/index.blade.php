@@ -50,7 +50,7 @@
        <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
             <div class="carousel-inner" data-bs-interval="3000">
 
-                @forelse ($sport_articles as $key => $article)
+                @forelse ($popular_articles as $key => $article)
                 
                    <a href="{{ route('article.show', ['article' => $article, 'slug' => $article->getSlug()])}}">
                      <div class="carousel-item @if ($key === 0) active @endif">
@@ -83,13 +83,36 @@
 
 
 
-<div class="row">
+<div class="row mt-5 " style="margin-top: 10%">
     @forelse ($articles as $article)
-        <div class="col-sm-6 pt-2">
-            @include('articles.article_card')
+        <div class="col-sm-4 pt-2">
+            <div class="polaroid">
+                <a href="{{ route('article.show', ['slug' => $article->getSlug(), 'article' => $article->id]) }}">
+                    <div class="p-1">
+                        <p class="article-title">{{ substr($article->title, 0, 75) }}...</p>
+                    </div>
+                    <div class="container">
+                        <div class="index-image-container">
+                            <img src="{{ $article->getImagePath() }}" alt="{{ substr($article->title, 0, 30) }}" class="index-image">
+                        </div>
+                        <p class="article-content-index"> {{ substr($article->content, 0, 125) }}...</p>
+                        <span class="text-end">{{$article->getDate()}}</span>
+                        
+                    </div>
+                </a>
+            </div>
         </div>
     @empty
     @endforelse
 </div>
 
+<div class="mt-3">
+    {{ $articles->links() }}
+</div>
+
+<div class=" ml-4"><span>Ceci peut vous intéresser...</span></div>
+
+<div>
+
+</div>
 @endsection

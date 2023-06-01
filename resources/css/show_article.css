@@ -66,3 +66,12 @@ body{
   font-family:'Courier New', Courier, monospace;
   font-size: 18px;
 }
+
+.comment-content{
+  font-family:'Courier New', Courier, monospace;
+  font-size: 18px;
+}
+.comment-author{
+  font-family:'Courier New', Courier, monospace;
+  font-size: 18px;
+}

@@ -109,5 +109,8 @@ class Article extends Model
     {
         return $builder->orderBy('created_at', 'asc');
     }
-
+    public function scopeApprovedArticles(Builder $builder)
+    {
+        return $builder->where('approved', 1);
+    }
 }

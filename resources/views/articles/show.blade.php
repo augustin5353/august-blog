@@ -48,13 +48,13 @@
               @forelse ($comments as $comment)
                 <div class="  d-flex  align-content-center justify-items-center">
                   @if ($comment->user->image !== null)
-                    <div class="avartar">
+                    <div class="avartar mr-2">
                       <img src="{{ $comment->user->getImagePath() }}" alt="{{ $comment->user->name }}" class="avartar-image">
                     </div>
                   @endif
-                      <p>{{ $comment->user->name }} </p>
+                      <p class="article-author-name">{{ $comment->user->name }} </p>
                 </div>
-                <p>{{ $comment->content}}
+                <p class="comment-content">{{ $comment->content}}
                   @can('update', $comment)
                   <div class="d-flex justify-start align-content-center align-items-center mt-0">
                     <a href="{{ route('comment.edit', ['comment' => $comment])}} " class=" mr-3 ">Modifier</a>
@@ -75,7 +75,7 @@
     </div>
     </div>
 
-    <div class="col">
+    <div class="col mb-5">
       @forelse ($popular_articles as $article)
         <a href="{{ route('article.show', ['article' => $article, 'slug' => $article->getSlug()]) }}">
           <div class="d-flex   align-items-start popular-article-div">

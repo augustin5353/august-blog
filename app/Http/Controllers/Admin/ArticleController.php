@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Events\ApproveArticleEvent;
+use App\Models\User;
 use App\Models\Article;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Notifications\PostArticleNotification;
 
 class ArticleController extends Controller
 {
@@ -13,7 +16,7 @@ class ArticleController extends Controller
      */
     public function approvedArticles()
     {
-        $articles = Article::where('approved', 1)->paginate(15);
+        $articles = Article::approvedArticles()->paginate(15);
 
         return view('admin.article.index', [
             'articles' =>$articles,
@@ -32,6 +35,8 @@ class ArticleController extends Controller
         $article->approved = true;
 
         $article->save();
+
+        event(new ApproveArticleEvent($article));
 
         return back();
     }
